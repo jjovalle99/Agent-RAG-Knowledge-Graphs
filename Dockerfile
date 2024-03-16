@@ -9,5 +9,5 @@ COPY --chown=agentic ./ ./
 RUN pip install --upgrade poetry --no-cache-dir && \
     poetry install --with main --no-cache --no-interaction \
     --no-ansi
-EXPOSE 8000
+EXPOSE 8001
 CMD ["poetry", "run", "python", "serve.py"]
