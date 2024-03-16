@@ -4,17 +4,30 @@ version = "0.1.0"
 description = ""
 authors = ["jjovalle <jj.ovalle@uniandes.edu.co>"]
 readme = "README.md"
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "~3.11"
 langchain = "^0.1.12"
 langchain-openai = "^0.0.8"
 langsmith = "^0.1.27"
+python-dotenv = "^1.0.1"
+langchain-community = "^0.0.28"
+neo4j = "^5.18.0"
+langchain-experimental = "^0.0.54"
+langchainhub = "^0.1.15"
 
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.3"
+beautifulsoup4 = "^4.12.3"
+black = "^24.3.0"
+isort = "^5.13.2"
+yfiles-jupyter-graphs = "^1.6.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120 
