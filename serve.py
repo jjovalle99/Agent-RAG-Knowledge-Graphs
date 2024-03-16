@@ -1,4 +1,3 @@
-import os
 from typing import List
 
 from dotenv import load_dotenv
@@ -16,19 +15,15 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langserve import add_routes
 
-from src.async_llm_transformer import AsyncLLMGraphTransformer
 from src.graph_retriever_utils import Entities, FinalRetriever, structured_retriever
 
 # Load environment variables
 load_dotenv()
 agent_prompt = hub.pull("hwchase17/openai-functions-agent")
 llm = ChatOpenAI(model_name="gpt-4-0125-preview", temperature=0)
-# llm_transformer = AsyncLLMGraphTransformer(llm=llm)
 
 # Graph database
 graph = Neo4jGraph()
-# graph_documents = llm_transformer.aconvert_to_graph_documents(documents=documents)
-# graph.add_graph_documents(graph_documents=graph_documents, baseEntityLabel=True, include_source=True)
 
 # Vector-Keyword Retriever
 vector_index = Neo4jVector.from_existing_graph(
@@ -54,9 +49,9 @@ retriever = FinalRetriever(
 
 # Create Tools
 retriever_tool = create_retriever_tool(
-    retriever,
-    "langsmith_search",
-    "Search for information about LangSmith. For any questions about LangSmith, you must use this tool!",
+    retriever=retriever,
+    name="aws_generative_ai_competency_search",
+    description="Search for information about AWS Generative AI Competency. For any questions about AWS Generative AI Competency, you must use this tool!",
 )
 search = TavilySearchResults()
 tools = [retriever_tool, search]
@@ -68,18 +63,13 @@ agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 # 4. App definition
 app = FastAPI(
-    title="LangChain Server",
+    title="Agent-Knowledge-Graph-RAG",
     version="1.0",
-    description="A simple API server using LangChain's Runnable interfaces",
 )
 
 
 class Input(BaseModel):
-    input: str
-    chat_history: List[BaseMessage] = Field(
-        ...,
-        extra={"widget": {"type": "chat", "input": "location"}},
-    )
+    input: str = "What are the Generative AI Practice Requirements?"
 
 
 class Output(BaseModel):

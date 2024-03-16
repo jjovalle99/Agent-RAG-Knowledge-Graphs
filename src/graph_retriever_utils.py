@@ -1,3 +1,4 @@
+import asyncio
 from typing import Any, List
 
 from langchain_community.vectorstores.neo4j_vector import remove_lucene_chars
@@ -73,4 +74,22 @@ class FinalRetriever(BaseRetriever):
         structured_results = [Document(page_content=structured_output)]
         # Vector + Keyword retrieval
         unstructured_results = self.vector_index.similarity_search(query)
+        return structured_results + unstructured_results
+
+    async def aget_relevant_documents(self, query: str) -> str:
+        # Graph retrieval
+        structured_output = await asyncio.to_thread(
+            self.structured_retriever,
+            question=query,
+            entity_chain=self.entity_chain,
+            graph=self.graph,
+        )
+        structured_results = [Document(page_content=structured_output)]
+
+        # Vector + Keyword retrieval
+        unstructured_results = await asyncio.to_thread(
+            self.vector_index.similarity_search,
+            query,
+        )
+
         return structured_results + unstructured_results

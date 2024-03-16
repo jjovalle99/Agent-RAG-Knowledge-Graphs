@@ -1,6 +1,6 @@
 format:
-	isort app.py
-	black app.py
+	isort serve.py
+	black serve.py
 	isort src/*.py
 	black src/*.py
 

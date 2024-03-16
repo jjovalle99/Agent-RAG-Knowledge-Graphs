@@ -16,6 +16,8 @@ langchain-community = "^0.0.28"
 neo4j = "^5.18.0"
 langchain-experimental = "^0.0.54"
 langchainhub = "^0.1.15"
+streamlit = "^1.32.2"
+langserve = {extras = ["all"], version = "^0.0.51"}
 
 
 [tool.poetry.group.dev.dependencies]
