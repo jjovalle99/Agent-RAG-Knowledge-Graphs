@@ -1,0 +1,7 @@
+.venv/
+.env
+.gitignore
+.python-version
+Makefile
+.git/
+README

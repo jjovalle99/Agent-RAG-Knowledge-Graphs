@@ -1,16 +1,14 @@
-from typing import List
-
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_functions_agent
 from langchain.prompts import ChatPromptTemplate
-from langchain.pydantic_v1 import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel
 from langchain.tools.retriever import create_retriever_tool
 from langchain_community.graphs import Neo4jGraph
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_community.vectorstores import Neo4jVector
-from langchain_core.messages import BaseMessage
 from langchain_openai.chat_models import ChatOpenAI
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langserve import add_routes
@@ -65,6 +63,16 @@ agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 app = FastAPI(
     title="Agent-Knowledge-Graph-RAG",
     version="1.0",
+)
+
+# Set all CORS enabled origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 
